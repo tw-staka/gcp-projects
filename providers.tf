@@ -15,5 +15,5 @@ provider "google-beta" {
 # The bucket is provisioned by the project creation creation step.
 terraform {
   required_version = "0.11.13"
-  # backend "gcs" {}
+  backend "gcs" {}
 }
