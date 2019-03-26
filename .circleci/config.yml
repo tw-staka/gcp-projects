@@ -13,5 +13,5 @@ jobs:
     steps:
       - checkout
       - run: ls
-      - run: echo $DEFAULT_APPLICATION_CREDENTIALS_FILE > application_default_credentials.json
-      - run: terraform init terraform init -backend-config=bucket=ttf-projects-state-bucket-4123 -backend-config=prefix=staging
+      - run: echo $DEFAULT_APPLICATION_CREDENTIALS_FILE | base64 -D > application_default_credentials.json
+      - run: terraform init -backend-config=bucket=ttf-projects-state-bucket-4123 -backend-config=prefix=staging
