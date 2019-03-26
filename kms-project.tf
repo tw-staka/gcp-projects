@@ -23,5 +23,5 @@ resource "google_project_service" "kms" {
 resource "google_project_iam_member" "cloudkms_admin" {
   project    = "${module.project.project_id}"
   role       = "roles/cloudkms.admin"
-  member     = "serviceAccount:${module.project.number}@cloudbuild.gserviceaccount.com"
+  member     = "serviceAccount:${module.project.terraform_email}"
 }
