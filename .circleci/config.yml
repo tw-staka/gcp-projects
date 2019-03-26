@@ -15,3 +15,4 @@ jobs:
       - run: ls
       - run: echo $DEFAULT_APPLICATION_CREDENTIALS_FILE | base64 -d > application_default_credentials.json
       - run: terraform init -backend-config=bucket=ttf-projects-state-bucket-4123 -backend-config=prefix=staging
+      - run: terraform plan -var-file staging.tfvars -out=terraform.plan
