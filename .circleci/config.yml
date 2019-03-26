@@ -9,4 +9,4 @@ jobs:
     executor: terraform
     steps:
       - checkout
-      - run: version
+      - run: terraform version
