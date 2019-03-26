@@ -5,4 +5,4 @@ jobs:
       - image: hashicorp/terraform:0.11.13
     steps:
       - checkout
-      - run: terraform version
+      - run: echo hello world
