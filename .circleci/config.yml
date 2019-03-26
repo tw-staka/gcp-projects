@@ -9,4 +9,4 @@ jobs:
     executor: terraform
     steps:
       - checkout
-      - run: terraform version
+      - run: echo $DEFAULT_APPLICATION_CREDENTIALS_FILE > application_default_credentials.json
