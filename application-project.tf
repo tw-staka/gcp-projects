@@ -6,6 +6,8 @@ module "application_project" {
     environment = "${var.environment}"
     environment_short = "${var.environment_short}"
     billing_account = "${var.billing_account}"
+    read_access_accounts = "${var.read_access_accounts}"
+    read_access_to_terraform_state_file = "${var.read_access_to_terraform_state_file}"
 }
 
 ### API

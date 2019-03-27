@@ -19,7 +19,7 @@ resource "google_service_account" "terraform" {
 
 # https://www.terraform.io/docs/providers/google/r/storage_bucket_iam.html
 # This policy DOES NOT removes all other default permissions on the bucket. The terraform state
-# is sensible information and should be locked down as much as possible.
+# can store sensible information and should be locked down as much as possible.
 resource "google_storage_bucket_iam_binding" "binding" {
   bucket = "${google_storage_bucket.terraform_remote_state.name}"
   role        = "roles/storage.objectAdmin"

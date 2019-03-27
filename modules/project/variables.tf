@@ -19,3 +19,9 @@ variable "read_access_accounts" {
     default = []
     description = "Grant the roles/viewer to the project."
 }
+
+variable "read_access_to_terraform_state_file" {
+    type = "list"
+    default = []
+    description = "Grant view access to terraform state file, this allow a developer to run terraform plan on its machine. But not apply."
+}

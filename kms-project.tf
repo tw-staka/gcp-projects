@@ -6,6 +6,7 @@ module "project" {
     environment = "${var.environment}"
     environment_short = "${var.environment_short}"
     billing_account = "${var.billing_account}"
+    read_access_accounts = "${var.read_access_accounts}"
 }
 
 ### API
