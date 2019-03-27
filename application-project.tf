@@ -63,8 +63,15 @@ data "google_compute_default_service_account" "default" {
   project = "${module.application_project.project_id}"
  }
 # Allow terraform service account to act as default compute service account
+# This is required to create/update GKE clusters.
 resource "google_service_account_iam_member" "gce-default-account-iam" {
   service_account_id = "${data.google_compute_default_service_account.default.name}"
   role               = "roles/iam.serviceAccountUser"
   member             = "serviceAccount:${module.application_project.terraform_email}"
+}
+# We need compute viewer to create a GKE cluster, more specifically compute.instanceGroupManagers.get
+resource "google_project_iam_member" "compute_viewer" {
+  project    = "${module.application_project.project_id}"
+  role       = "roles/compute.viewer"
+  member     = "serviceAccount:${module.application_project.terraform_email}"
 }
