@@ -17,3 +17,9 @@ variable "read_access_to_terraform_state_file" {
     default = []
     description = "Grant view access to terraform state file, this allow a developer to run terraform plan on its machine. But not apply."
 }
+
+variable "cloudbuild_editors" {
+    type = "list"
+    default = []
+    description = "Allow groups, user or service account to create/update and trigger cloud build"
+}

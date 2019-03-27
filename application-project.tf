@@ -83,5 +83,11 @@ resource "google_project_iam_member" "source_repo_admin" {
   project   = "${module.application_project.project_id}"
   role      = "roles/source.admin"
   member    = "user:sandhu@thoughtworks.com"
+}
 
+resource "google_project_iam_member" "cloudbuild_editors" {
+  count         = "${length(var.cloudbuild_editors)}"
+  project    = "${module.application_project.project_id}"
+  role       = "roles/cloudbuild.builds.editor"
+  member     = "${var.cloudbuild_editors[count.index]}"
 }
