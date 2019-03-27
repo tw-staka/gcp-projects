@@ -34,6 +34,15 @@ resource "google_storage_bucket_iam_binding" "binding" {
     ]
 }
 
+# Allow developer to run terraform plan from their laptop. Helps to validate terraform code.
+# Only the infrastructure pipeline can apply terraform code (and break the class scenario users if implemented)
+resource "google_storage_bucket_iam_member" "terraform_state_read_only" {
+  count      = "${length(var.read_access_to_terraform_state_file)}"
+  bucket     = "${google_storage_bucket.terraform_remote_state.name}"
+  role       = "roles/storage.objectViewer"
+  member     = "${var.read_access_to_terraform_state_file[count.index]}"
+}
+
 # Here we setup what this terraform can do
 # THE page you will spend a lot of time on:
 # https://cloud.google.com/iam/docs/understanding-roles
