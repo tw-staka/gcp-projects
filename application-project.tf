@@ -58,3 +58,11 @@ resource "google_project_iam_member" "container_admin" {
   role       = "roles/container.admin"
   member     = "serviceAccount:${module.application_project.terraform_email}"
 }
+
+data "google_compute_default_service_account" "default" { }
+# Allow terraform service account to act as default compute service account
+resource "google_service_account_iam_member" "gce-default-account-iam" {
+  service_account_id = "${data.google_compute_default_service_account.default.name}"
+  role               = "roles/iam.serviceAccountUser"
+  member             = "serviceAccount:${module.application_project.terraform_email}"
+}
