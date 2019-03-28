@@ -26,3 +26,37 @@ resource "google_project_iam_member" "cloudkms_admin" {
   role       = "roles/cloudkms.admin"
   member     = "serviceAccount:${module.project.terraform_email}"
 }
+
+
+
+### KMS
+resource "google_kms_key_ring" "developer_keyring" {
+  name     = "developer-keyring"
+  project = "${module.project.project_id}"
+  location = "${var.region}"
+}
+
+resource "google_kms_crypto_key" "secret_key" {
+  name = "secret-key"
+  key_ring = "${google_kms_key_ring.developer_keyring.self_link}"
+
+  rotation_period = "100000s"
+
+  lifecycle {
+    prevent_destroy = true
+  }
+}
+
+resource "google_kms_key_ring_iam_member" "developer_encryption" {
+  key_ring_id = "${google_kms_key_ring.developer_keyring.self_link}"
+  role        = "roles/cloudkms.cryptoKeyEncrypter"
+
+  // Needs to be changed to a developer group ie: group:app_developer@company.com
+  member      = "user:sandhu@thoughtworks.com"
+}
+
+resource "google_kms_key_ring_iam_member" "cloudbuild_decryption" {
+  key_ring_id = "${google_kms_key_ring.developer_keyring.self_link}"
+  role        = "roles/cloudkms.cryptoKeyDecrypter"
+  member    = "serviceAccount:${module.application_project.number}@cloudbuild.gserviceaccount.com"
+}
