@@ -78,16 +78,16 @@ resource "google_project_iam_member" "compute_viewer" {
   member     = "serviceAccount:${module.application_project.terraform_email}"
 }
 
-# Adding Bal as a source-repo admin in order to mirror github repo
-resource "google_project_iam_member" "source_repo_admin" {
-  project   = "${module.application_project.project_id}"
-  role      = "roles/source.admin"
-  member    = "user:sandhu@thoughtworks.com"
-}
-
 resource "google_project_iam_member" "cloudbuild_editors" {
   count         = "${length(var.cloudbuild_editors)}"
   project    = "${module.application_project.project_id}"
   role       = "roles/cloudbuild.builds.editor"
   member     = "${var.cloudbuild_editors[count.index]}"
+}
+
+# Grant Cloud Build access to GKE
+resource "google_project_iam_member" "cloudbuild_container_developer" {
+  project   = "${module.application_project.project_id}"
+  role      = "roles/container.developer"
+  member    = "serviceAccount:${module.application_project.number}@cloudbuild.gserviceaccount.com"
 }
