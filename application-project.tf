@@ -44,7 +44,7 @@ resource "google_project_service" "cloud_source_repository" {
   disable_on_destroy = false
 }
 
-resource "google_project_service" "kms" {
+resource "google_project_service" "kms-app-project" {
   project = "${module.application_project.project_id}"
   service = "cloudkms.googleapis.com"
   disable_dependent_services = true
