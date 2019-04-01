@@ -20,6 +20,7 @@ This environment variable will be decoded and populate a file to be used by Terr
  [See here](./.circleci/config.yml)
 
  1. Link this repository to CircleCI.
+ 1. Verify that the correct billing account has been entered in the .tfvars files, you can find your Billing Account ID in the Billing section of the Google console.
 
  ## Installation
 
