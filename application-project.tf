@@ -70,6 +70,7 @@ resource "google_project_iam_member" "container_admin" {
 
 data "google_compute_default_service_account" "default" {
   project = "${module.application_project.project_id}"
+  depends_on = ["google_project_service.gke"]
  }
 # Allow terraform service account to act as default compute service account
 # This is required to create/update GKE clusters.

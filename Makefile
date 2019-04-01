@@ -1,7 +1,7 @@
 # This file is a symbolic link
 
 ENVIRONMENT?=staging
-BUCKET_STATE_PROJECT_ID=ttf-projects-state-bucket-4123
+BUCKET_STATE_PROJECT_ID=terraform-backend-state-2x2
 
 .PHONY: all
 all: plan
