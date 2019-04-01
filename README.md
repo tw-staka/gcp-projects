@@ -40,3 +40,9 @@ This Terraform configuration is run by CircleCi. It creates two projects:
 For each project, via the project module, has a:
 - Terraform Service Account with least privilege to create resources in it's own project.
 - Google Cloud Storage bucket, used to hold Terraform state.
+
+## Responsabilities
+
+The responsabilities of this repository is to create projects, enable services and assign permissions to Groups, Users and Service accounts.
+
+To create a new project, a Developer should raise a pull request, or to add/remove permissions to a services.
