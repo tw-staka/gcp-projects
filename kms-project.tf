@@ -34,6 +34,8 @@ resource "google_kms_key_ring" "developer_keyring" {
   name     = "developer-keyring"
   project = "${module.project.project_id}"
   location = "${var.region}"
+
+  depends_on = ["google_project_service.kms"]
 }
 
 resource "google_kms_crypto_key" "secret_key" {
