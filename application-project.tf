@@ -44,6 +44,8 @@ resource "google_project_service" "cloud_source_repository" {
   disable_on_destroy = false
 }
 
+# We need to enable this api to allow cloudbuild to decrypt secrets, even though
+# the keys are created in another project.
 resource "google_project_service" "kms-app-project" {
   project = "${module.application_project.project_id}"
   service = "cloudkms.googleapis.com"
