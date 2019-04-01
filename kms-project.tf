@@ -47,6 +47,7 @@ resource "google_kms_crypto_key" "secret_key" {
   }
 }
 
+# Developers can encrypt ONLY
 resource "google_kms_key_ring_iam_member" "developer_encryption" {
   key_ring_id = "${google_kms_key_ring.developer_keyring.self_link}"
   role        = "roles/cloudkms.cryptoKeyEncrypter"
@@ -55,6 +56,7 @@ resource "google_kms_key_ring_iam_member" "developer_encryption" {
   member      = "user:sandhu@thoughtworks.com"
 }
 
+# Cloud Build can Decrypt secrets encrypted by developers.
 resource "google_kms_key_ring_iam_member" "cloudbuild_decryption" {
   key_ring_id = "${google_kms_key_ring.developer_keyring.self_link}"
   role        = "roles/cloudkms.cryptoKeyDecrypter"

@@ -54,12 +54,14 @@ resource "google_project_service" "kms-app-project" {
 }
 
 ### IAM
-# https://cloud.google.com/iam/docs/understanding-roles#cloud-kms-roles
+# https://cloud.google.com/iam/docs/understanding-roles
+# Allow terraform to create/update/delete cloudbuild triggers.
 resource "google_project_iam_member" "cloudbuild_editor" {
   project    = "${module.application_project.project_id}"
   role       = "roles/cloudbuild.builds.editor"
   member     = "serviceAccount:${module.application_project.terraform_email}"
 }
+# Allow terraform to create GKE cluster, this is the highest gke privilege.
 resource "google_project_iam_member" "container_admin" {
   project    = "${module.application_project.project_id}"
   role       = "roles/container.admin"
@@ -83,6 +85,7 @@ resource "google_project_iam_member" "compute_viewer" {
   member     = "serviceAccount:${module.application_project.terraform_email}"
 }
 
+# Allow groups or users referenced in var.cloudbuild_editors to trigger cloud build pipelines.
 resource "google_project_iam_member" "cloudbuild_editors" {
   count         = "${length(var.cloudbuild_editors)}"
   project    = "${module.application_project.project_id}"
@@ -90,7 +93,7 @@ resource "google_project_iam_member" "cloudbuild_editors" {
   member     = "${var.cloudbuild_editors[count.index]}"
 }
 
-# Grant Cloud Build access to GKE
+# Grant Cloud Build access to GKE, this allows cloudbuild to deploy a manifest.
 resource "google_project_iam_member" "cloudbuild_container_developer" {
   project   = "${module.application_project.project_id}"
   role      = "roles/container.developer"

@@ -25,34 +25,20 @@ resource "google_storage_bucket_iam_binding" "binding" {
   role        = "roles/storage.objectAdmin"
 
   members = [
-      # Allow terraform service account to read the state file.
+      # Allow terraform service account to read the state file/bucket.
       "serviceAccount:${google_service_account.terraform.email}",
-      #DEBUG only
-      "user:pvalla@thoughtworks.com"
-      # You should add an SRE group or Security group for Break Glass Scenario
+      # You could add an SRE group or Security group for Break Glass Scenario
       # group:security@thoughtworks.com
     ]
 }
 
 # Allow developer to run terraform plan from their laptop. Helps to validate terraform code.
 # Only the infrastructure pipeline can apply terraform code (and break the class scenario users if implemented)
+# Be careful, if you store secrets in the state file, developer will have access to it.
+# This could be featured toogle.
 resource "google_storage_bucket_iam_member" "terraform_state_read_only" {
   count      = "${length(var.read_access_to_terraform_state_file)}"
   bucket     = "${google_storage_bucket.terraform_remote_state.name}"
   role       = "roles/storage.objectViewer"
   member     = "${var.read_access_to_terraform_state_file[count.index]}"
-}
-
-# Here we setup what this terraform can do
-# THE page you will spend a lot of time on:
-# https://cloud.google.com/iam/docs/understanding-roles
-resource "google_project_iam_binding" "project_iam_admin" {
-  project    = "${google_project.project.project_id}"
-  # This is a very powerful role, right now, cloudbuild could make itself Project Owner.
-  # You should setup CODEOWNER feature on github to restrict futher down who can edit IAM permission
-  # Or setup Iam rules in Layer1 (when creating the project and enabling apis)
-  role       = "roles/resourcemanager.projectIamAdmin"
-  members     = [
-    "serviceAccount:${google_service_account.terraform.email}"
-  ]
 }

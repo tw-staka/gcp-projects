@@ -11,6 +11,7 @@ resource "google_project" "project" {
   # Projects created with this resource must be associated with an Organization or a folder
   org_id = "${var.org_id}"
   billing_account = "${var.billing_account}"
+  # Uncomment the line below if you are creating projects in a folder.
 #   folder_id = ""
   auto_create_network = true
 

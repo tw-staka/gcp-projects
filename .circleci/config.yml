@@ -6,7 +6,7 @@ executors:
     environment:
       GOOGLE_APPLICATION_CREDENTIALS: application_default_credentials.json
 
-    
+  # Improvement This can break down in different steps
 jobs:
   build:
     executor: terraform
@@ -16,4 +16,5 @@ jobs:
       - run: echo $DEFAULT_APPLICATION_CREDENTIALS_FILE | base64 -d > application_default_credentials.json
       - run: terraform init -backend-config=bucket=ttf-projects-state-bucket-4123 -backend-config=prefix=staging
       - run: terraform plan -var-file staging.tfvars -out=terraform.stg.plan
+      # We could make this step manual.
       - run: terraform apply "terraform.stg.plan"
