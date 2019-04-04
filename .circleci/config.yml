@@ -12,9 +12,8 @@ jobs:
     executor: terraform
     steps:
       - checkout
-      - run: ls
-      - run: echo $DEFAULT_APPLICATION_CREDENTIALS_FILE | base64 -d > application_default_credentials.json
-      - run: terraform init -backend-config=bucket=terraform-backend-state-2x2 -backend-config=prefix=staging
+      - run: echo $DEFAULT_APPLICATION_CREDENTIALS_FILE | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
+      - run: terraform init -backend-config=bucket=tw-in-a-box-projects-terraform-state -backend-config=prefix=staging
       - run: terraform plan -var-file staging.tfvars -out=terraform.stg.plan
       # We could make this step manual.
       - run: terraform apply "terraform.stg.plan"
