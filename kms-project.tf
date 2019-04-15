@@ -2,11 +2,11 @@
 module "project" {
     source = "./modules/project"
     project_name = "kms-project"
-    org_id = "${var.org_id}"
     environment = "${var.environment}"
     environment_short = "${var.environment_short}"
     billing_account = "${var.billing_account}"
     read_access_accounts = "${var.read_access_accounts}"
+    folder_id = "${var.folder_id}"
 }
 
 ### API

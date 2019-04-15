@@ -1,5 +1,4 @@
 # Thoughtworks organization
-org_id = "730381449093"
 environment = "production"
 environment_short = "prd"
 region = "australia-southeast1"

@@ -6,3 +6,7 @@
 *.tfstate.*
 
 .idea
+.tfvars
+
+.circleci/config-2.yml
+.localcircleci.env

@@ -1,7 +1,6 @@
 variable "project_name" {}
-variable "org_id" {}
 variable "billing_account" {}
-
+variable "folder_id" {}
 variable "environment" {}
 variable "environment_short" {}
 

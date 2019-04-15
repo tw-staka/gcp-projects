@@ -5,15 +5,36 @@ executors:
       - image: hashicorp/terraform:0.11.13
     environment:
       GOOGLE_APPLICATION_CREDENTIALS: application_default_credentials.json
+  google_sdk:
+    docker:
+      - image: google/cloud-sdk:alpine
+    environment:
+      GOOGLE_APPLICATION_CREDENTIALS: application_default_credentials.json
 
   # Improvement This can break down in different steps
 jobs:
-  build:
+  create_terraform_state_bucket:
+    executor: google_sdk
+    steps:
+      - checkout
+      - run: echo $DEFAULT_APPLICATION_CREDENTIALS_FILE | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
+      - run: gcloud auth activate-service-account --key-file=$GOOGLE_APPLICATION_CREDENTIALS
+      - run: ./createStateFileBucket.sh stakafolderresources-237623 $TF_VAR_region staka-gcp-projects-terraform-state
+  provision_environment_google_projects:
     executor: terraform
     steps:
       - checkout
       - run: echo $DEFAULT_APPLICATION_CREDENTIALS_FILE | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
-      - run: terraform init -backend-config=bucket=tw-in-a-box-projects-terraform-state -backend-config=prefix=staging
-      - run: terraform plan -var-file staging.tfvars -out=terraform.stg.plan
+      - run: terraform init -backend-config=bucket=staka-gcp-projects-terraform-state -backend-config=prefix=staging
+      - run: terraform plan -var="environment=staging" -var="environment_short=stg" -out=terraform.stg.plan
       # We could make this step manual.
-      - run: terraform apply "terraform.stg.plan"
+#      - run: terraform apply "terraform.stg.plan"
+
+workflows:
+  version: 2.1
+  create_terraform_state_bucket_and_provision_environment_google_projects:
+    jobs:
+      - create_terraform_state_bucket
+      - provision_environment_google_projects:
+          requires:
+            - create_terraform_state_bucket

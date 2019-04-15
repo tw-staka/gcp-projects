@@ -2,18 +2,19 @@
 module "application_project" {
     source = "./modules/project"
     project_name = "application"
-    org_id = "${var.org_id}"
     environment = "${var.environment}"
     environment_short = "${var.environment_short}"
     billing_account = "${var.billing_account}"
     read_access_accounts = "${var.read_access_accounts}"
     read_access_to_terraform_state_file = "${var.read_access_to_terraform_state_file}"
+    folder_id = "${var.folder_id}"
 }
 
 ### API
 
 resource "google_project_service" "gke" {
   project = "${module.application_project.project_id}"
+  # Kubernetes Engine API
   service = "container.googleapis.com"
   # If true, services that are enabled and which depend on this service should also be disabled when this service is destroyed.
   disable_dependent_services = true
@@ -31,15 +32,10 @@ resource "google_project_service" "container_analysis" {
   disable_dependent_services = true
   disable_on_destroy = false
 }
-resource "google_project_service" "cloudbuild" {
+
+resource "google_project_service" "cloudresourcemanager" {
   project = "${module.application_project.project_id}"
-  service = "cloudbuild.googleapis.com"
-  disable_dependent_services = true
-  disable_on_destroy = false
-}
-resource "google_project_service" "cloud_source_repository" {
-  project = "${module.application_project.project_id}"
-  service = "sourcerepo.googleapis.com"
+  service = "cloudresourcemanager.googleapis.com"
   disable_dependent_services = true
   disable_on_destroy = false
 }
@@ -54,16 +50,10 @@ resource "google_project_service" "kms-app-project" {
 }
 
 ### IAM
-# https://cloud.google.com/iam/docs/understanding-roles
-# Allow terraform to create/update/delete cloudbuild triggers.
-resource "google_project_iam_member" "cloudbuild_editor" {
-  project    = "${module.application_project.project_id}"
-  role       = "roles/cloudbuild.builds.editor"
-  member     = "serviceAccount:${module.application_project.terraform_email}"
-}
 # Allow terraform to create GKE cluster, this is the highest gke privilege.
 resource "google_project_iam_member" "container_admin" {
   project    = "${module.application_project.project_id}"
+  # kubernetes engine api
   role       = "roles/container.admin"
   member     = "serviceAccount:${module.application_project.terraform_email}"
 }
@@ -87,16 +77,3 @@ resource "google_project_iam_member" "compute_viewer" {
 }
 
 # Allow groups or users referenced in var.cloudbuild_editors to trigger cloud build pipelines.
-resource "google_project_iam_member" "cloudbuild_editors" {
-  count         = "${length(var.cloudbuild_editors)}"
-  project    = "${module.application_project.project_id}"
-  role       = "roles/cloudbuild.builds.editor"
-  member     = "${var.cloudbuild_editors[count.index]}"
-}
-
-# Grant Cloud Build access to GKE, this allows cloudbuild to deploy a manifest.
-resource "google_project_iam_member" "cloudbuild_container_developer" {
-  project   = "${module.application_project.project_id}"
-  role      = "roles/container.developer"
-  member    = "serviceAccount:${module.application_project.number}@cloudbuild.gserviceaccount.com"
-}

@@ -42,8 +42,22 @@ For each project, via the project module, has a:
 - Terraform Service Account with least privilege to create resources in it's own project.
 - Google Cloud Storage bucket, used to hold Terraform state.
 
-## Responsabilities
+## Responsibilities
 
-The responsabilities of this repository is to create projects, enable services and assign permissions to Groups, Users and Service accounts.
+The responsibilities of this repository is to create projects, enable services and assign permissions to Groups, Users and Service accounts.
 
 To create a new project, a Developer should raise a pull request, or to add/remove permissions to a services.
+
+
+## Prerequisites
+
+1. Assume a folder exists. Lets call the folder Staka.
+1. Create a project under Staka called StakaFolderResources.
+1. Create a service account under the project StakaFolderResources called staka_folder_service_account.
+1. Create a key as well and download the json format of the key 
+1. Grant Storage Admin role to  staka_folder_service_account
+1. Select the folder Staka and go to IAM
+1. Add the service account staka_folder_service_account email as a member
+1. Grant project creator role 
+1. Enable Cloud Manager Resource API, Cloud Billing API in this project
+1.   

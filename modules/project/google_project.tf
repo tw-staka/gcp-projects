@@ -9,10 +9,9 @@ resource "google_project" "project" {
   name                = "${var.project_name}-${var.environment_short}"
   project_id          = "${var.project_name}-${var.environment_short}-${random_id.project_suffix.hex}"
   # Projects created with this resource must be associated with an Organization or a folder
-  org_id = "${var.org_id}"
   billing_account = "${var.billing_account}"
   # Uncomment the line below if you are creating projects in a folder.
-#   folder_id = ""
+  folder_id = "${var.folder_id}"
   auto_create_network = true
 
   labels = {

@@ -22,7 +22,7 @@ resource "google_service_account" "terraform" {
 # can store sensible information and should be locked down as much as possible.
 resource "google_storage_bucket_iam_binding" "binding" {
   bucket = "${google_storage_bucket.terraform_remote_state.name}"
-  role        = "roles/storage.objectAdmin"
+  role   = "roles/storage.objectAdmin"
 
   members = [
       # Allow terraform service account to read the state file/bucket.
