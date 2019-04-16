@@ -59,5 +59,35 @@ To create a new project, a Developer should raise a pull request, or to add/remo
 1. Select the folder Staka and go to IAM
 1. Add the service account staka_folder_service_account email as a member
 1. Grant project creator role 
-1. Enable Cloud Manager Resource API, Cloud Billing API in this project
-1.   
+1. Enable Cloud Manager Resource API, Cloud Billing API, iam.googleapis.com, cloudkms.googleapis.com in this project
+   
+
+## To run things locally:
+
+export GOOGLE_APPLICATION_CREDENTIALS=<creds.json>
+export TF_VAR_org_id=<org id>
+export TF_VAR_read_access_accounts='["user:email1","user:email2"]'
+export TF_VAR_read_access_to_terraform_state_file='["user:email1","user:email2"]'
+export TF_VAR_region="australia-southeast1"
+export TF_VAR_billing_account=<billing account id>
+export TF_VAR_folder_id=<folder id>
+terraform plan -var="environment=staging" -var="environment_short=stg"
+terraform apply -var="environment=staging" -var="environment_short=stg”
+terraform destroy -var="environment=staging" -var="environment_short=stg"
+
+## To Test Circle CI locally:
+circleci config process ./.circleci/config.yml > .circleci/config-2.yml
+
+circleci local execute -c .circleci/config-2.yml --job provision_environment_google_projects  \
+-e TF_VAR_org_id=<orgid> -e TF_VAR_read_access_accounts='["user:email1","user:email2"]' \
+-e TF_VAR_read_access_to_terraform_state_file='["user:email1","user:email2"]' \
+-e TF_VAR_region="australia-southeast1" -e TF_VAR_billing_account="<billing account>" \
+-e DEFAULT_APPLICATION_CREDENTIALS_FILE=${DEFAULT_APPLICATION_CREDENTIALS_FILE}
+
+## For new users joining
+
+Add the user to Staka folder and assign these roles:
+Service Account Key Admin
+Folder Admin
+Folder IAM Admin
+Project IAM Admin
