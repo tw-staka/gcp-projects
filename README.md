@@ -91,7 +91,7 @@ circleci local execute -c .circleci/config-2.yml --job provision_environment_goo
 ## For new users joining
 
 Add the user to Staka folder and assign these roles:
-Service Account Key Admin
-Folder Admin
-Folder IAM Admin
-Project IAM Admin
+* Service Account Key Admin
+* Folder Admin
+* Folder IAM Admin
+* Project IAM Admin
