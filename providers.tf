@@ -14,6 +14,6 @@ provider "google-beta" {
 # The terraform state is stored in a google cloud storage bucket inside this project
 # The bucket is provisioned by the project creation creation step.
 terraform {
-  required_version = "0.11.13"
+  required_version = "0.11.14"
   backend "gcs" {}
 }

@@ -49,6 +49,14 @@ resource "google_project_service" "kms-app-project" {
   disable_on_destroy = false
 }
 
+resource "google_project_service" "cloudbuild" {
+  project = "${module.application_project.project_id}"
+  service = "cloudbuild.googleapis.com"
+  # If true, services that are enabled and which depend on this service should also be disabled when this service is destroyed.
+  disable_dependent_services = true
+  disable_on_destroy = false
+}
+
 ### IAM
 # Allow terraform to create GKE cluster, this is the highest gke privilege.
 resource "google_project_iam_member" "container_admin" {
