@@ -1,9 +1,9 @@
 #!/usr/bin/env bash -e
-
+export PROJECT_ID=staka-project-${RANDOM}
 export TF_CREDS=~/.config/gcloud/${PROJECT_ID}.json
 
 #Create Project
-gcloud projects create ${PROJECT_ID} --organization ${TF_VAR_org_id} --set-as-default
+gcloud projects create ${PROJECT_ID} --folder=${TF_VAR_folder_id} --set-as-default
 
 #Set Default Project
 gcloud config set project ${PROJECT_ID}
@@ -29,12 +29,12 @@ gcloud projects add-iam-policy-binding ${PROJECT_ID} \
   --role roles/storage.admin
 
 gcloud projects add-iam-policy-binding ${PROJECT_ID} \
-  --member serviceAccount:terraform@${$PROJECT_ID}.iam.gserviceaccount.com \
+  --member serviceAccount:terraform@${PROJECT_ID}.iam.gserviceaccount.com \
   --role roles/container.admin
 
 gcloud projects add-iam-policy-binding ${PROJECT_ID} \
   --member serviceAccount:terraform@${PROJECT_ID}.iam.gserviceaccount.com \
-  --role roles/iam.serviceAccountUser
+  --role roles/iam.serviceAccountAdmin
 
 #Enable required services
 gcloud services enable cloudresourcemanager.googleapis.com
