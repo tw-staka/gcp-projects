@@ -1,7 +1,6 @@
 #!/usr/bin/env bash -e
 
 export TF_CREDS=~/.config/gcloud/${PROJECT_ID}.json
-export TF_VAR_region="australia-southeast1"
 
 #Create Project
 gcloud projects create ${PROJECT_ID} --organization ${TF_VAR_org_id} --set-as-default
@@ -37,6 +36,13 @@ gcloud projects add-iam-policy-binding ${PROJECT_ID} \
   --member serviceAccount:terraform@${PROJECT_ID}.iam.gserviceaccount.com \
   --role roles/iam.serviceAccountUser
 
+#Enable required services
+gcloud services enable cloudresourcemanager.googleapis.com
+gcloud services enable cloudbilling.googleapis.com
+gcloud services enable iam.googleapis.com
+gcloud services enable compute.googleapis.com
+gcloud services enable sqladmin.googleapis.com
+gcloud services enable container.googleapis.com
 
 #Print Out Default Creds for CircleCI
 echo "Created DEFAULT_APPLICATION_CREDENTIALS_FILE for CircleCI! \

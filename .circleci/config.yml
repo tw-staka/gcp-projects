@@ -19,13 +19,13 @@ jobs:
       - checkout
       - run: echo $DEFAULT_APPLICATION_CREDENTIALS_FILE | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
       - run: gcloud auth activate-service-account --key-file=$GOOGLE_APPLICATION_CREDENTIALS
-      - run: ./createStateFileBucket.sh ${PROJECT_ID} $TF_VAR_region staka-gcp-projects-terraform-state
+      - run: ./createStateFileBucket.sh ${PROJECT_ID} $TF_VAR_region staka-gcp-projects-terraform-state-bucket
   provision_environment_google_projects:
     executor: terraform
     steps:
       - checkout
       - run: echo $DEFAULT_APPLICATION_CREDENTIALS_FILE | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
-      - run: terraform init -backend-config=bucket=staka-gcp-projects-terraform-state -backend-config=prefix=staging
+      - run: terraform init -backend-config=bucket=staka-gcp-projects-terraform-state-bucket -backend-config=prefix=staging
       - run: terraform plan -var="environment=staging" -var="environment_short=stg" -var-file="staging.tfvars" -out=terraform.stg.plan
       - run: terraform apply "terraform.stg.plan"
 
