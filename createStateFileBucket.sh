@@ -2,7 +2,6 @@
 
 set -euo pipefail
 
-PROJECT_NAME=$1
 GCP_REGION=$2
 STATE_BUCKET_NAME=$3
 
@@ -17,7 +16,7 @@ function stateBucketExists {
 }
 
 function createStateBucket {
-    gsutil mb -c regional -p ${PROJECT_NAME} -l ${GCP_REGION} "gs://${STATE_BUCKET_NAME}"
+    gsutil mb -c regional -p ${PROJECT_ID} -l ${GCP_REGION} "gs://${STATE_BUCKET_NAME}"
 }
 
 main
