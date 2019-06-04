@@ -1,9 +1,5 @@
 [![CircleCI](https://circleci.com/gh/tw-staka/gcp-projects.svg?style=svg&circle-token=0e625ced23c8680574b949e7fb604f32b808c6f9)](https://circleci.com/gh/tw-staka/gcp-projects)
 
-
-
----- deprecated below this line ----
-
 # tw-in-a-box-gcp-projects
 This Terraform repo contains configuration to create projects in GCP.
 
